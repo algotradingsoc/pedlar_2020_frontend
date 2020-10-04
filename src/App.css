@@ -60,7 +60,3 @@ body {
 .ui.fluid.dropdown {
   border-radius: 1rem !important;
 }
-
-::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
