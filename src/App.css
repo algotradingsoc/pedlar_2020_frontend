@@ -36,3 +36,31 @@
     transform: rotate(360deg);
   }
 }
+
+body {
+  background-color: rgb(8, 17, 49) !important;
+}
+
+#navbar {
+  background-color: rgb(8, 17, 49) !important;
+  height: 8rem;
+}
+
+.ui.fluid.dropdown > .dropdown.icon {
+  color: rgb(8, 17, 49) !important;
+}
+
+.ui.multiple.dropdown > .label {
+  background-color: rgb(18, 39, 112);
+  color: white;
+  padding: 0.5rem 1rem 0.5rem 1rem !important;
+  border-radius: 1rem;
+}
+
+.ui.fluid.dropdown {
+  border-radius: 1rem !important;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
