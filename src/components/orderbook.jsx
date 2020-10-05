@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
+import Ticker from "./ticker";
 
 class OrderBook extends Component {
   constructor(props) {
@@ -7,6 +8,15 @@ class OrderBook extends Component {
     this.state = {
       options: [],
       selected: ["2041", "2891", "3347", "5765", "6343", "6472", "6829"],
+      selectedSymbols: [
+        { text: "EEM", value: "2041" },
+        { text: "GLD", value: "2891" },
+        { text: "HYG", value: "3347" },
+        { text: "QQQ", value: "5765" },
+        { text: "SLV", value: "6343" },
+        { text: "SPY", value: "6472" },
+        { text: "TLT", value: "6829" },
+      ],
       // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
@@ -26,7 +36,27 @@ class OrderBook extends Component {
       });
   }
 
-  state = {};
+  handleOnChange = (event, data) => {
+    // length === 3 is remove, length === 2 is add
+    const values = data.value;
+    if (event["_dispatchListeners"].length === 3) {
+      const selectedSymbols = this.state.selectedSymbols;
+      for (let i = 0; i < selectedSymbols.length; i++) {
+        if (!values.includes(selectedSymbols[i].value)) {
+          selectedSymbols.splice(i, 1);
+          this.setState({ selectedSymbols: selectedSymbols });
+          break;
+        }
+      }
+    } else {
+      const value = values[values.length - 1];
+      let selectedSymbols = this.state.selectedSymbols;
+      const obj = this.state.options.filter((x) => x.value === value)[0];
+      selectedSymbols.push(obj);
+      selectedSymbols.sort((a, b) => a.text.localeCompare(b.text));
+      this.setState({ selectedSymbols: selectedSymbols });
+    }
+  };
 
   render() {
     return (
@@ -45,6 +75,7 @@ class OrderBook extends Component {
               options={this.state.options}
               className="text-light"
               defaultValue={this.state.selected}
+              onChange={this.handleOnChange}
             />
           </div>
         </div>
@@ -62,19 +93,13 @@ class OrderBook extends Component {
           </div>
         </div>
         <div
-          className="mx-auto w-75 overflow-auto"
+          className="mx-auto overflow-auto w-75"
           style={{ maxHeight: "340px" }}
         >
-          <div
-            className="row d-flex mx-auto text-light text-center mt-4 pt-2 pb-2"
-            style={{ width: "95%" }}
-          >
-            <div className="col-sm-2">Exchange</div>
-            <div className="col-sm-2">Ticker</div>
-            <div className="col-sm-2">Bid</div>
-            <div className="col-sm-2">Ask</div>
-            <div className="col-sm-2">Bid Size</div>
-            <div className="col-sm-2">Ask Size</div>
+          <div>
+            {this.state.selectedSymbols.map((sym) => (
+              <Ticker key={sym.text} value={sym.value} text={sym.text} />
+            ))}
           </div>
         </div>
       </div>
