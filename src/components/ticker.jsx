@@ -11,28 +11,29 @@ class Ticker extends Component {
       askSize: "-",
       bidSize: "-",
     };
-    // const socket = require("socket.io-client")(
-    //   "https://ws-api.iextrading.com/1.0/tops"
-    // );
+    const socket = require("socket.io-client")(
+      "https://ws-api.iextrading.com/1.0/tops"
+    );
 
-    // socket.on("message", (message) => {
-    //   const object = JSON.parse(message);
-    //   console.log("json", object);
-    //   this.setState({
-    //     askPrice: object.askPrice,
-    //     bidPrice: object.bidPrice,
-    //     askSize: object.askSize,
-    //     bidSize: object.bidSize,
-    //   });
-    // });
+    socket.on("message", (message) => {
+      const object = JSON.parse(message);
+      console.log("json", object);
+      this.setState({
+        askPrice: object.askPrice,
+        bidPrice: object.bidPrice,
+        askSize: object.askSize,
+        bidSize: object.bidSize,
+      });
+    });
 
-    // // Connect to the channel
-    // socket.on("connect", () => {
-    //   socket.emit("subscribe", this.state.text);
-    // });
+    // Connect to the channel
+    socket.on("connect", () => {
+      socket.emit("subscribe", this.state.text);
+    });
 
-    // socket.on("disconnect", () => console.log("Disconnected."));
+    socket.on("disconnect", () => console.log("Disconnected."));
   }
+
   render() {
     return (
       <div
