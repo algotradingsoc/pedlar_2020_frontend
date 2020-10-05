@@ -1,18 +1,13 @@
-import React, { Component, useState } from "react";
+import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
 class OrderBook extends Component {
   constructor(props) {
     super(props);
     this.state = {
       options: [],
-      subjects: [
-        { text: "1", value: "kannada" },
-        { text: "2", value: "english" },
-        { text: "3", value: "hindhi" },
-      ],
+      selected: ["2041", "2891", "3347", "5765", "6343", "6472", "6829"],
+      // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
 
@@ -22,22 +17,18 @@ class OrderBook extends Component {
       .then((data) => {
         let options = [];
         data.forEach((x) => {
-          const obj = { text: x.symbol, value: x.iexId };
+          const obj = { value: x.iexId, text: x.symbol };
           options.push(obj);
         });
-        this.setState({ options: options });
-        console.log("options", this.state.options);
+        this.setState({
+          options: options,
+        });
       });
   }
 
   state = {};
 
   render() {
-    const subjects = [
-      { text: "1", value: "kannada" },
-      { text: "2", value: "english" },
-      { text: "3", value: "hindhi" },
-    ];
     return (
       <div>
         <h2 className="p-3 text-light text-center">
@@ -53,6 +44,7 @@ class OrderBook extends Component {
               selection
               options={this.state.options}
               className="text-light"
+              defaultValue={this.state.selected}
             />
           </div>
         </div>

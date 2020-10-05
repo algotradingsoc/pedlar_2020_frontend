@@ -51,12 +51,36 @@ body {
 }
 
 .ui.multiple.dropdown > .label {
-  background-color: rgb(18, 39, 112);
+  background-color: rgb(1, 17, 167);
   color: white;
   padding: 0.5rem 1rem 0.5rem 1rem !important;
   border-radius: 1rem;
+  /* border: 1px solid white; */
 }
 
 .ui.fluid.dropdown {
   border-radius: 1rem !important;
+  background-color: rgb(8, 17, 49) !important;
+  border: 1px solid white !important;
+}
+
+.ui.fluid.dropdown > .dropdown.icon {
+  color: white !important;
+}
+
+.ui.dropdown .menu {
+  background: rgb(8, 17, 49) !important;
+}
+
+.ui.dropdown .menu .item {
+  color: white !important;
+  border: none !important;
+}
+
+.ui.selection.active.dropdown .menu {
+  border-color: white !important;
+}
+
+.ui.multiple.search.dropdown > input.search {
+  color: white;
 }
