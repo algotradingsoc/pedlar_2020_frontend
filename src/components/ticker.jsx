@@ -17,7 +17,6 @@ class Ticker extends Component {
 
     socket.on("message", (message) => {
       const object = JSON.parse(message);
-      console.log("json", object);
       this.setState({
         askPrice: object.askPrice,
         bidPrice: object.bidPrice,
@@ -28,6 +27,7 @@ class Ticker extends Component {
 
     // Connect to the channel
     socket.on("connect", () => {
+      console.log("connected", this.state.text);
       socket.emit("subscribe", this.state.text);
     });
 
@@ -40,8 +40,8 @@ class Ticker extends Component {
         className="row d-flex mx-auto text-light text-center mt-4 pt-2 pb-2"
         style={{ width: "95%" }}
       >
+        <div className="col-sm-2">IEX</div>
         <div className="col-sm-2">{this.state.text}</div>
-        <div className="col-sm-2">Ticker</div>
         <div className="col-sm-2">{this.state.bidPrice}</div>
         <div className="col-sm-2">{this.state.askPrice}</div>
         <div className="col-sm-2">{this.state.bidSize}</div>
