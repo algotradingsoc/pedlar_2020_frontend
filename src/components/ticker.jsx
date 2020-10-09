@@ -11,6 +11,9 @@ class Ticker extends Component {
       askSize: "-",
       bidSize: "-",
     };
+  }
+
+  componentDidMount() {
     const socket = require("socket.io-client")(
       "https://ws-api.iextrading.com/1.0/tops"
     );
@@ -27,7 +30,6 @@ class Ticker extends Component {
 
     // Connect to the channel
     socket.on("connect", () => {
-      console.log("connected", this.state.text);
       socket.emit("subscribe", this.state.text);
     });
 

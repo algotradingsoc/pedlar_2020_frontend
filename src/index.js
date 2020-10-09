@@ -6,21 +6,6 @@ import App from "./App";
 import "../node_modules/bootstrap/dist/css/bootstrap.min.css";
 import "semantic-ui-css/semantic.min.css";
 
-// const socket = require("socket.io-client")(
-//   "https://ws-api.iextrading.com/1.0/tops"
-// );
-
-// socket.on("message", (message) => {
-//   console.log("message", message);
-// });
-
-// // Connect to the channel
-// socket.on("connect", () => {
-//   socket.emit("subscribe", "snap");
-// });
-
-// socket.on("disconnect", () => console.log("Disconnected."));
-
 ReactDOM.render(
   <React.StrictMode>
     <App />

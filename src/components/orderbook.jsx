@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
 import Ticker from "./ticker";
+import Graph from "./graph";
 
 class OrderBook extends Component {
   constructor(props) {
@@ -79,6 +80,9 @@ class OrderBook extends Component {
             />
           </div>
         </div>
+        <div className="mx-auto overflow-auto w-75">
+          <Graph />
+        </div>
         <div className="row w-75 mx-auto mt-1">
           <div
             className="row d-flex mx-auto text-light text-center mt-4 pt-2 pb-2 border-bottom "
@@ -101,6 +105,13 @@ class OrderBook extends Component {
               <Ticker key={sym.text} value={sym.value} text={sym.text} />
             ))}
           </div>
+        </div>
+        <div className="text-light mx-auto w-75 text-right mt-5">
+          IEX Real-Time Price provided for free by{" "}
+          <a href="https://iextrading.com/developers">IEX</a>. View{" "}
+          <a href="https://iextrading.com/apiexhibita/">
+            IEX&rsquo;s Terms of Use
+          </a>
         </div>
       </div>
     );

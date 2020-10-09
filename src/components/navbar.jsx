@@ -19,13 +19,13 @@ class Navbar extends Component {
       >
         <a
           href=""
-          className="p-3 ml-5 text-light text-decoration-none"
-          style={{ fontSize: "1.45rem", fontWeight: "700" }}
+          className="p-3 text-light text-decoration-none"
+          style={{ fontSize: "2rem", fontWeight: "700", marginLeft: "5rem" }}
         >
           Pedlar
         </a>
         <div className="d-flex align-items-center">
-          <div className="mr-5 text-light d-flex" style={{ width: "178px" }}>
+          <div className="mr-3 text-light d-flex" style={{ width: "178px" }}>
             <div className="mr-2">Current time:</div>
             <div>
               {this.state.time} {this.tick()}
