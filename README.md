@@ -1,3 +1,15 @@
+# IC Algosoc web application 
+
+A web application to stream real-time data from IEX for selected ETF and live performance of trading strategies. Address: 
+
+
+
+
+
+
+
+## For Developers 
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
