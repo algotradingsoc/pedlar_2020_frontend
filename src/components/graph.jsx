@@ -1,11 +1,41 @@
 import React, { Component } from "react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer} from 'recharts';
 
 class Graph extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      data: [
+        {
+          name: 'Page A', uv: 4000, pv: 2400, amt: 2400,
+        },
+        {
+          name: 'Page B', uv: 3000, pv: 1398, amt: 2210,
+        },
+        {
+          name: 'Page C', uv: 2000, pv: 9800, amt: 2290,
+        },
+        {
+          name: 'Page D', uv: 2780, pv: 3908, amt: 2000,
+        },
+        {
+          name: 'Page E', uv: 1890, pv: 4800, amt: 2181,
+        },
+        {
+          name: 'Page F', uv: 2390, pv: 3800, amt: 2500,
+        },
+        {
+          name: 'Page G', uv: 3490, pv: 4300, amt: 2100,
+        },
+      ]
+    }
+  }
+
   componentDidMount() {
     fetch(`http://localhost:5000/data/`)
       .then((res) => res.json())
       .then((data) => console.log(data));
-
+    
     const ws = new WebSocket("ws://localhost:8080/");
     ws.onopen = () => {
       console.log("connected");
@@ -22,7 +52,21 @@ class Graph extends Component {
     };
   }
   render() {
-    return <h1>Hi i am the graph component</h1>;
+    return (
+      <ResponsiveContainer width='100%' aspect={7.0/2.0}>
+        <LineChart data={this.state.data}
+              margin={{top: 20, right: 10, left: 10, bottom: 5}}>
+          <XAxis dataKey="name" tick={{ fill: 'white' }}/>
+          <YAxis tick={{ fill: 'white' }}/>
+          <CartesianGrid strokeDasharray="3 2"/>
+          <Tooltip isAnimationActive={false}/>
+          <Legend style={{color: "white"}}/>
+          <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{r: 8}}/>
+          <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+          <Line type="monotone" dataKey="amt" stroke="white" />
+        </LineChart>
+      </ResponsiveContainer>
+    );
   }
 }
 

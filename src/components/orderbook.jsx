@@ -80,9 +80,6 @@ class OrderBook extends Component {
             />
           </div>
         </div>
-        <div className="mx-auto overflow-auto w-75">
-          <Graph />
-        </div>
         <div className="row w-75 mx-auto mt-1">
           <div
             className="row d-flex mx-auto text-light text-center mt-4 pt-2 pb-2 border-bottom "
@@ -106,7 +103,10 @@ class OrderBook extends Component {
             ))}
           </div>
         </div>
-        <div className="text-light mx-auto w-75 text-right mt-5">
+        <div className="mx-auto overflow-auto w-75 mt-5">
+          <Graph />
+        </div>
+        <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}
           <a href="https://iextrading.com/developers">IEX</a>. View{" "}
           <a href="https://iextrading.com/apiexhibita/">

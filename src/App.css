@@ -84,3 +84,11 @@ body {
 .ui.multiple.search.dropdown > input.search {
   color: white;
 }
+
+.recharts-legend-wrapper {
+  color: white;
+}
+
+.recharts-default-tooltip {
+  background-color: black !important;
+}
