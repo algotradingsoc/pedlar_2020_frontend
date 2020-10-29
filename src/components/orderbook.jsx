@@ -18,6 +18,7 @@ class OrderBook extends Component {
         { text: "SPY", value: "6472" },
         { text: "TLT", value: "6829" },
       ],
+      // chartTicker: "HYG"
       // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
@@ -33,6 +34,7 @@ class OrderBook extends Component {
         });
         this.setState({
           options: options,
+          // chartTicker: "HYG"
         });
       });
   }
@@ -58,6 +60,12 @@ class OrderBook extends Component {
       this.setState({ selectedSymbols: selectedSymbols });
     }
   };
+
+  changeChart = (event) => {
+    const ticker = event.currentTarget.querySelector("div").querySelectorAll("div")[1].innerText;
+    this.setState({chartTicker: ticker})
+    console.log(this.state.chartTicker);
+  }
 
 
   render() {
@@ -98,9 +106,9 @@ class OrderBook extends Component {
           className="mx-auto overflow-auto w-75"
           style={{ maxHeight: "340px", minHeight: "340px" }}
         >
-          <div>
+          <div id="tickers-div">
             {this.state.selectedSymbols.length > 0 && this.state.selectedSymbols.map((sym) => (
-              <Ticker key={sym.text} value={sym.value} text={sym.text} />
+              <button onClick={this.changeChart} className="mx-auto row pt-2 pb-2 d-flex align-items-center border-0" style={{width: "95%", backgroundColor: "transparent", height: "50px"}}><Ticker key={sym.text} value={sym.value} text={sym.text} /></button>
             ))}
             {this.state.selectedSymbols.length <= 0 && 
               <div className="row w-75 mx-auto mt-5">
@@ -114,8 +122,9 @@ class OrderBook extends Component {
             }
           </div>
         </div>
-        <div className="mx-auto w-75 mt-5">
-          <Chart className="p-5"/>
+        <div className="mx-auto w-75 mt-5" style={{position: "relative"}}>
+          {!this.state.chartTicker && <div className="w-100 h-100 d-flex align-items-center justify-content-center" style={{backgroundColor: "transparent", position: "absolute", top: "0", zIndex: "100"}}><div class="text-light" style={{fontSize: "22px", fontWeight: "bold"}}>Select a Ticker above to view chart.</div></div>}
+          <Chart className="p-5" chartTicker={this.state.chartTicker}/>
         </div>
         <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}

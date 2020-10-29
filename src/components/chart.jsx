@@ -6,14 +6,7 @@ var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 class Chart extends Component {
     constructor(props){
     super(props)
-    this.state = {
-      data: [
-        {
-          name: 'Page A', amt: 2400,
-        }
-      ]
     }
-  }
 
   //   componentDidMount() {
 //     fetch(`http://localhost:5000/data/`)
@@ -38,13 +31,14 @@ class Chart extends Component {
 
 
 	render() {
+    console.log(this.props.chartTicker)
 		const options = {
       animationEnabled: true,
       theme: "dark2",
       backgroundColor: "rgb(8, 17, 49)", // "light1", "light2", "dark1", "dark2"
       exportEnabled: true,
       title:{
-        text: "Facebook Stock Price - 2016"
+        text: `Stock Prices ${this.props.chartTicker? `for ${this.props.chartTicker}`: ""}`
       },
       subtitles: [{
         text: "All Prices are in USD"
@@ -121,7 +115,7 @@ class Chart extends Component {
     }
 		
 		return (
-		<div style={{position: "relative"}}>
+		<div style={this.props.chartTicker? {position: "relative"} : {filter: "blur(5px)", position: "relative"}}>
 			<CanvasJSChart style={{backgroundColor: "black!important"}} options = {options} 
         /* onRef={ref => this.chart = ref} */
       

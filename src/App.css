@@ -104,3 +104,12 @@ body {
 .canvasjs-chart-credit {
   display: none !important;
 }
+
+#tickers-div button:hover {
+  opacity: 0.5;
+}
+
+#tickers-div button:focus {
+  opacity: 0.5 !important;
+  outline: 0;
+}

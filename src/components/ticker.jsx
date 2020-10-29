@@ -39,8 +39,7 @@ class Ticker extends Component {
   render() {
     return (
       <div
-        className="row d-flex mx-auto text-light text-center mt-4 pt-2 pb-2"
-        style={{ width: "95%" }}
+        className="row mx-auto text-light text-center w-100"
       >
         <div className="col-sm-2">IEX</div>
         <div className="col-sm-2">{this.state.text}</div>
