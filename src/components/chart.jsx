@@ -4,30 +4,25 @@ import CanvasJSReact from '../canvasJs/canvasjs.react';
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
  
 class Chart extends Component {
-    constructor(props){
-    super(props)
-    }
+// componentDidMount() {
+//   const socket = require("socket.io-client")(
+//     "https://ws-api.iextrading.com/1.0/tops"
+//   );
 
-  //   componentDidMount() {
-//     fetch(`http://localhost:5000/data/`)
-//       .then((res) => res.json())
-//       .then((data) => console.log(data));
-    
-//     const ws = new WebSocket("ws://localhost:8080/");
-//     ws.onopen = () => {
-//       console.log("connected");
-//     };
-//     ws.onclose = () => {
-//       console.log("disconnected");
-//     };
-//     ws.onmessage = (message) => {
-//       console.log(message);
-//     };
+//   socket.on("message", (message) => {
+//   });
 
-//     ws.onerror = () => {
-//       console.log("error");
-//     };
-//   }
+//   // Connect to the channel
+//   socket.on("connect", () => {
+//     if (this.props.chartTicker!=null) socket.emit("subscribe", this.state.chartTicker);
+//     console.log("hey there")
+//   });
+
+//   socket.on("disconnect", () => console.log("Disconnected."));
+// }
+
+// componentWillReceiveProps(props) {
+// }
 
 
 	render() {
@@ -64,7 +59,7 @@ class Chart extends Component {
         cursor: "pointer"
       },     
       data: [{
-        type: "candlestick",
+        type: "ohlc",
         showInLegend: true,
         name: "Stock Price",
         yValueFormatString: "$#,##0.00",

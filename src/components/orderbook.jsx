@@ -3,6 +3,7 @@ import { Dropdown } from "semantic-ui-react";
 import Ticker from "./ticker";
 import Chart from "./chart";
 
+
 class OrderBook extends Component {
   constructor(props) {
     super(props);
@@ -18,7 +19,9 @@ class OrderBook extends Component {
         { text: "SPY", value: "6472" },
         { text: "TLT", value: "6829" },
       ],
-      // chartTicker: "HYG"
+      socket: require("socket.io-client")(
+        "https://ws-api.iextrading.com/1.0/tops"
+      )
       // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
@@ -33,14 +36,25 @@ class OrderBook extends Component {
           options.push(obj);
         });
         this.setState({
-          options: options,
-          // chartTicker: "HYG"
+          options: options
         });
       });
+
+
+
+      this.state.socket.on("message", (message) => {
+        console.log(message);
+      });
+    
+      // Connect to the channel
+      this.state.socket.on("connect", () => {
+        if (this.state.chartTicker!=null) this.state.socket.emit("subscribe", this.state.chartTicker);
+      });
+    
+      this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
   handleOnChange = (event, data) => {
-    // length === 3 is remove, length === 2 is add
     const values = data.value;
     if (event["_dispatchListeners"].length === 3) {
       const selectedSymbols = this.state.selectedSymbols;
@@ -64,7 +78,16 @@ class OrderBook extends Component {
   changeChart = (event) => {
     const ticker = event.currentTarget.querySelector("div").querySelectorAll("div")[1].innerText;
     this.setState({chartTicker: ticker})
-    console.log(this.state.chartTicker);
+
+    this.state.socket.disconnect();
+    this.state.socket.connect();
+
+    this.state.socket.on("connect", () => {
+      console.log("hey there");
+      if (this.state.chartTicker!=null) this.state.socket.emit("subscribe", this.state.chartTicker);
+    });
+  
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
 
