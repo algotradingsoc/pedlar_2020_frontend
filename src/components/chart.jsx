@@ -121,12 +121,14 @@ class Chart extends Component {
     }
 		
 		return (
-		<div>
+		<div style={{position: "relative"}}>
 			<CanvasJSChart style={{backgroundColor: "black!important"}} options = {options} 
-				/* onRef={ref => this.chart = ref} */
+        /* onRef={ref => this.chart = ref} */
+      
 			/>
 			{/*You can get reference to the chart instance as shown above using onRef. This allows you to access all chart properties and methods*/}
-		</div>
+      <div style={{width: "10%", height: "40px", background: "black", position: "absolute", bottom: "0", backgroundColor: "rgb(8, 17, 49)"}}></div>
+    </div>
 		);
 	}
 }

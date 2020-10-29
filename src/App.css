@@ -100,3 +100,7 @@ body {
 .canvasjs-chart-canvas {
   padding: 1rem;
 }
+
+.canvasjs-chart-credit {
+  display: none !important;
+}

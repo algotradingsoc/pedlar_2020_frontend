@@ -9,6 +9,7 @@ function App() {
     <div>
       <NavBar />
       <OrderBook />
+      <div className="w-100" style={{height: "2rem"}}></div>
     </div>
   );
 }
