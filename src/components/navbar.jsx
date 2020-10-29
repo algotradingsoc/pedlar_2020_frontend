@@ -16,7 +16,7 @@ class Navbar extends Component {
       <div
         className="w-100 d-flex justify-content-between sticky-top align-items-center"
         id="navbar"
-        style={{opacity: "0.97"}}
+        style={{ opacity: "0.97" }}
       >
         <a
           href=""

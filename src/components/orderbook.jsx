@@ -3,7 +3,6 @@ import { Dropdown } from "semantic-ui-react";
 import Ticker from "./ticker";
 import Chart from "./chart";
 
-
 class OrderBook extends Component {
   constructor(props) {
     super(props);
@@ -21,7 +20,7 @@ class OrderBook extends Component {
       ],
       socket: require("socket.io-client")(
         "https://ws-api.iextrading.com/1.0/tops"
-      )
+      ),
       // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
@@ -36,22 +35,18 @@ class OrderBook extends Component {
           options.push(obj);
         });
         this.setState({
-          options: options
+          options: options,
         });
       });
 
+    // Connect to the channel
+    this.state.socket.on("connect", () => {
+      if (this.state.chartTicker != null)
+        this.state.socket.emit("subscribe", this.state.chartTicker);
+      console.log("inital connection established");
+    });
 
-
-      this.state.socket.on("message", (message) => {
-        console.log(message);
-      });
-    
-      // Connect to the channel
-      this.state.socket.on("connect", () => {
-        if (this.state.chartTicker!=null) this.state.socket.emit("subscribe", this.state.chartTicker);
-      });
-    
-      this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
   handleOnChange = (event, data) => {
@@ -76,20 +71,26 @@ class OrderBook extends Component {
   };
 
   changeChart = (event) => {
-    const ticker = event.currentTarget.querySelector("div").querySelectorAll("div")[1].innerText;
-    this.setState({chartTicker: ticker})
+    const ticker = event.currentTarget
+      .querySelector("div")
+      .querySelectorAll("div")[1].innerText;
+    this.setState({ chartTicker: ticker });
 
     this.state.socket.disconnect();
     this.state.socket.connect();
 
-    this.state.socket.on("connect", () => {
-      console.log("hey there");
-      if (this.state.chartTicker!=null) this.state.socket.emit("subscribe", this.state.chartTicker);
+    this.state.socket.on("message", (message) => {
+      const object = JSON.parse(message);
+      this.setState({ trace: object.bidPrice - object.askPrice / 2 });
     });
-  
-    this.state.socket.on("disconnect", () => console.log("Disconnected."));
-  }
 
+    this.state.socket.on("connect", () => {
+      if (this.state.chartTicker != null)
+        this.state.socket.emit("subscribe", this.state.chartTicker);
+    });
+
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
+  };
 
   render() {
     return (
@@ -130,24 +131,58 @@ class OrderBook extends Component {
           style={{ maxHeight: "340px", minHeight: "340px" }}
         >
           <div id="tickers-div">
-            {this.state.selectedSymbols.length > 0 && this.state.selectedSymbols.map((sym) => (
-              <button onClick={this.changeChart} className="mx-auto row pt-2 pb-2 d-flex align-items-center border-0" style={{width: "95%", backgroundColor: "transparent", height: "50px"}}><Ticker key={sym.text} value={sym.value} text={sym.text} /></button>
-            ))}
-            {this.state.selectedSymbols.length <= 0 && 
+            {this.state.selectedSymbols.length > 0 &&
+              this.state.selectedSymbols.map((sym) => (
+                <button
+                  onClick={this.changeChart}
+                  className="mx-auto row pt-2 pb-2 d-flex align-items-center border-0"
+                  style={{
+                    width: "95%",
+                    backgroundColor: "transparent",
+                    height: "50px",
+                  }}
+                >
+                  <Ticker key={sym.text} value={sym.value} text={sym.text} />
+                </button>
+              ))}
+            {this.state.selectedSymbols.length <= 0 && (
               <div className="row w-75 mx-auto mt-5">
-              <div
-                className="row d-flex mx-auto text-light text-center pt-2 pb-2 mt-3 justify-content-center align-items-center"
-                style={{ width: "95%"}}
-              >
-                <div style={{fontSize: "15px"}}>Please Select a Ticker.</div>
+                <div
+                  className="row d-flex mx-auto text-light text-center pt-2 pb-2 mt-3 justify-content-center align-items-center"
+                  style={{ width: "95%" }}
+                >
+                  <div style={{ fontSize: "15px" }}>
+                    Please Select a Ticker.
+                  </div>
+                </div>
               </div>
-            </div>
-            }
+            )}
           </div>
         </div>
-        <div className="mx-auto w-75 mt-5" style={{position: "relative"}}>
-          {!this.state.chartTicker && <div className="w-100 h-100 d-flex align-items-center justify-content-center" style={{backgroundColor: "transparent", position: "absolute", top: "0", zIndex: "100"}}><div class="text-light" style={{fontSize: "22px", fontWeight: "bold"}}>Select a Ticker above to view chart.</div></div>}
-          <Chart className="p-5" chartTicker={this.state.chartTicker}/>
+        <div className="mx-auto w-75 mt-5" style={{ position: "relative" }}>
+          {!this.state.chartTicker && (
+            <div
+              className="w-100 h-100 d-flex align-items-center justify-content-center"
+              style={{
+                backgroundColor: "transparent",
+                position: "absolute",
+                top: "0",
+                zIndex: "100",
+              }}
+            >
+              <div
+                class="text-light"
+                style={{ fontSize: "22px", fontWeight: "bold" }}
+              >
+                Select a Ticker above to view chart.
+              </div>
+            </div>
+          )}
+          <Chart
+            className="p-5"
+            chartTicker={this.state.chartTicker}
+            trace={this.state.trace}
+          />
         </div>
         <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}
