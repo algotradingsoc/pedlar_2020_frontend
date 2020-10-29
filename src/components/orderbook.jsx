@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Dropdown } from "semantic-ui-react";
 import Ticker from "./ticker";
-import Graph from "./graph";
+import Chart from "./chart";
 
 class OrderBook extends Component {
   constructor(props) {
@@ -59,6 +59,7 @@ class OrderBook extends Component {
     }
   };
 
+
   render() {
     return (
       <div>
@@ -95,16 +96,26 @@ class OrderBook extends Component {
         </div>
         <div
           className="mx-auto overflow-auto w-75"
-          style={{ maxHeight: "340px" }}
+          style={{ maxHeight: "340px", minHeight: "340px" }}
         >
           <div>
-            {this.state.selectedSymbols.map((sym) => (
+            {this.state.selectedSymbols.length > 0 && this.state.selectedSymbols.map((sym) => (
               <Ticker key={sym.text} value={sym.value} text={sym.text} />
             ))}
+            {this.state.selectedSymbols.length <= 0 && 
+              <div className="row w-75 mx-auto mt-5">
+              <div
+                className="row d-flex mx-auto text-light text-center pt-2 pb-2 mt-3 justify-content-center align-items-center"
+                style={{ width: "95%"}}
+              >
+                <div style={{fontSize: "15px"}}>Please Select a Ticker.</div>
+              </div>
+            </div>
+            }
           </div>
         </div>
-        <div className="mx-auto overflow-auto w-75 mt-5">
-          <Graph />
+        <div className="mx-auto w-75 mt-5">
+          <Chart className="p-5"/>
         </div>
         <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}
