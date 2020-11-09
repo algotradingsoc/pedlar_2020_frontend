@@ -21,6 +21,7 @@ class OrderBook extends Component {
       socket: require("socket.io-client")(
         "https://ws-api.iextrading.com/1.0/tops"
       ),
+      chartTicker: "",
       // corresponding tops symbols: EEM, GLD, HYG, QQQ, SLV, SPY, TLT
     };
   }
@@ -40,13 +41,13 @@ class OrderBook extends Component {
       });
 
     // Connect to the channel
-    this.state.socket.on("connect", () => {
-      if (this.state.chartTicker != null)
-        this.state.socket.emit("subscribe", this.state.chartTicker);
-      console.log("inital connection established");
-    });
+    // this.state.socket.on("connect", () => {
+    //   if (this.state.chartTicker != null)
+    //     this.state.socket.emit("subscribe", this.state.chartTicker);
+    //   console.log("inital connection established");
+    // });
 
-    this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    // this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
   handleOnChange = (event, data) => {
@@ -76,20 +77,20 @@ class OrderBook extends Component {
       .querySelectorAll("div")[1].innerText;
     this.setState({ chartTicker: ticker });
 
-    this.state.socket.disconnect();
-    this.state.socket.connect();
+    // this.state.socket.disconnect();
+    // this.state.socket.connect();
 
-    this.state.socket.on("message", (message) => {
-      const object = JSON.parse(message);
-      this.setState({ trace: object.bidPrice - object.askPrice / 2 });
-    });
+    // this.state.socket.on("message", (message) => {
+    //   const object = JSON.parse(message);
+    //   this.setState({ trace: object.bidPrice - object.askPrice / 2 });
+    // });
 
-    this.state.socket.on("connect", () => {
-      if (this.state.chartTicker != null)
-        this.state.socket.emit("subscribe", this.state.chartTicker);
-    });
+    // this.state.socket.on("connect", () => {
+    //   if (this.state.chartTicker != null)
+    //     this.state.socket.emit("subscribe", this.state.chartTicker);
+    // });
 
-    this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    // this.state.socket.on("disconnect", () => console.log("Disconnected."));
   };
 
   render() {
@@ -178,11 +179,7 @@ class OrderBook extends Component {
               </div>
             </div>
           )}
-          <Chart
-            className="p-5"
-            chartTicker={this.state.chartTicker}
-            trace={this.state.trace}
-          />
+          <Chart className="p-5" chartTicker={this.state.chartTicker} />
         </div>
         <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}

@@ -2,35 +2,25 @@ import React, { Component } from "react";
 import CanvasJSReact from "../canvasJs/canvasjs.react";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
-var dps = [
-  { x: 1, y: 10 },
-  { x: 2, y: 13 },
-  { x: 3, y: 18 },
-  { x: 4, y: 20 },
-  { x: 5, y: 17 },
-  { x: 6, y: 10 },
-  { x: 7, y: 13 },
-  { x: 8, y: 18 },
-  { x: 9, y: 20 },
-  { x: 10, y: 17 },
-];
+var dps = [];
 var xVal = dps.length + 1;
 var yVal = 15;
-
 class Chart extends Component {
   constructor(props) {
     super(props);
     this.updateChart = this.updateChart.bind(this);
     this.state = {
+      socket: require("socket.io-client")(
+        "https://ws-api.iextrading.com/1.0/tops"
+      ),
+      chartTicker: this.props.text,
       options: {
         animationEnabled: true,
         theme: "dark2",
         backgroundColor: "rgb(8, 17, 49)", // "light1", "light2", "dark1", "dark2"
         exportEnabled: true,
         title: {
-          text: `Stock Prices ${
-            this.props.chartTicker ? `for ${this.props.chartTicker}` : ""
-          }`,
+          text: this.props.chartTicker,
         },
         subtitles: [
           {
@@ -40,6 +30,8 @@ class Chart extends Component {
         axisX: {
           // valueFormatString: "MMM"
           color: "black",
+          // labelFontColor: "rgb(8, 17, 49)",
+          // tickColor: "rgb(8, 17, 49)",
         },
         axisY: {
           prefix: "$",
@@ -83,20 +75,32 @@ class Chart extends Component {
           {
             type: "line",
             showInLegend: true,
-            name: "Net Income",
+            name: "Trace",
             axisYType: "secondary",
             yValueFormatString: "$#,##0.00bn",
             xValueFormatString: "MMMM",
             dataPoints: dps,
+            color: "white",
           },
         ],
       },
     };
   }
 
-  updateChart() {
-    yVal = yVal + Math.round(5 + Math.random() * (-5 - 5));
+  updateChart(trace, ticker) {
+    // if (
+    //   ticker != this.state.chartTicker &&
+    //   this.state.chartTicker != "Stock Prices"
+    // ) {
+    //   console.log("iweakrshjiwgjrh");
+    //   console.log(ticker);
+    //   this.setState({ chartTicker: ticker });
+    //   dps = [];
+    //   xVal = dps.length + 1;
+    // }
+    yVal = trace + Math.round(5 + Math.random() * (-5 - 5));
     dps.push({ x: xVal, y: yVal });
+    console.log(dps);
     xVal++;
     if (dps.length > 150) {
       dps.shift();
@@ -105,12 +109,44 @@ class Chart extends Component {
   }
 
   componentWillReceiveProps(props) {
+    // this.setState({ chartTicker: props.chartTicker });
+    // this.updateChart(props.trace, props.chartTicker);
     console.log(props);
-    this.updateChart();
+    this.state.socket.disconnect();
+    this.state.socket.connect();
+
+    this.state.socket.on("message", (message) => {
+      const object = JSON.parse(message);
+      // this.setState({ trace: object.bidPrice - object.askPrice / 2 });
+    });
+
+    this.state.socket.on("connect", () => {
+      if (this.state.chartTicker != null)
+        this.state.socket.emit("subscribe", this.state.chartTicker);
+    });
+
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
+  }
+
+  componentDidMount() {
+    // Connect to the channel
+    this.state.socket.on("connect", () => {
+      if (this.props.chartTicker != null)
+        this.state.socket.emit("subscribe", this.props.chartTicker);
+      console.log("inital connection established");
+    });
+
+    this.state.socket.on("message", (message) => {
+      const object = JSON.parse(message);
+      console.log(message);
+      // this.setState({ trace: object.bidPrice - object.askPrice / 2 });
+    });
+
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
   render() {
-    console.log("child............", this.state.options.data[0].dataPoints);
+    // console.log("child............", this.state.options.data[0].dataPoints);
     return (
       <div
         style={
