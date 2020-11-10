@@ -41,13 +41,13 @@ class OrderBook extends Component {
       });
 
     // Connect to the channel
-    // this.state.socket.on("connect", () => {
-    //   if (this.state.chartTicker != null)
-    //     this.state.socket.emit("subscribe", this.state.chartTicker);
-    //   console.log("inital connection established");
-    // });
+    this.state.socket.on("connect", () => {
+      if (this.state.chartTicker != null)
+        this.state.socket.emit("subscribe", this.state.chartTicker);
+      console.log("inital connection established");
+    });
 
-    // this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
   }
 
   handleOnChange = (event, data) => {
@@ -77,20 +77,20 @@ class OrderBook extends Component {
       .querySelectorAll("div")[1].innerText;
     this.setState({ chartTicker: ticker });
 
-    // this.state.socket.disconnect();
-    // this.state.socket.connect();
+    this.state.socket.disconnect();
+    this.state.socket.connect();
 
-    // this.state.socket.on("message", (message) => {
-    //   const object = JSON.parse(message);
-    //   this.setState({ trace: object.bidPrice - object.askPrice / 2 });
-    // });
+    this.state.socket.on("message", (message) => {
+      const object = JSON.parse(message);
+      this.setState({ trace: object.bidPrice - object.askPrice / 2 });
+    });
 
-    // this.state.socket.on("connect", () => {
-    //   if (this.state.chartTicker != null)
-    //     this.state.socket.emit("subscribe", this.state.chartTicker);
-    // });
+    this.state.socket.on("connect", () => {
+      if (this.state.chartTicker != null)
+        this.state.socket.emit("subscribe", this.state.chartTicker);
+    });
 
-    // this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    this.state.socket.on("disconnect", () => console.log("Disconnected."));
   };
 
   render() {

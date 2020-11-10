@@ -10,17 +10,13 @@ class Chart extends Component {
     super(props);
     this.updateChart = this.updateChart.bind(this);
     this.state = {
-      socket: require("socket.io-client")(
-        "https://ws-api.iextrading.com/1.0/tops"
-      ),
-      chartTicker: this.props.text,
       options: {
         animationEnabled: true,
         theme: "dark2",
         backgroundColor: "rgb(8, 17, 49)", // "light1", "light2", "dark1", "dark2"
         exportEnabled: true,
         title: {
-          text: this.props.chartTicker,
+          text: "Stock Prices",
         },
         subtitles: [
           {
@@ -111,38 +107,12 @@ class Chart extends Component {
   componentWillReceiveProps(props) {
     // this.setState({ chartTicker: props.chartTicker });
     // this.updateChart(props.trace, props.chartTicker);
-    console.log(props);
-    this.state.socket.disconnect();
-    this.state.socket.connect();
-
-    this.state.socket.on("message", (message) => {
-      const object = JSON.parse(message);
-      // this.setState({ trace: object.bidPrice - object.askPrice / 2 });
-    });
-
-    this.state.socket.on("connect", () => {
-      if (this.state.chartTicker != null)
-        this.state.socket.emit("subscribe", this.state.chartTicker);
-    });
-
-    this.state.socket.on("disconnect", () => console.log("Disconnected."));
-  }
-
-  componentDidMount() {
-    // Connect to the channel
-    this.state.socket.on("connect", () => {
-      if (this.props.chartTicker != null)
-        this.state.socket.emit("subscribe", this.props.chartTicker);
-      console.log("inital connection established");
-    });
-
-    this.state.socket.on("message", (message) => {
-      const object = JSON.parse(message);
-      console.log(message);
-      // this.setState({ trace: object.bidPrice - object.askPrice / 2 });
-    });
-
-    this.state.socket.on("disconnect", () => console.log("Disconnected."));
+    console.log(props.chartTicker);
+    let options = this.state.options;
+    options.title.text = props.chartTicker;
+    console.log(options);
+    this.setState({ options: options });
+    this.chart.render();
   }
 
   render() {
