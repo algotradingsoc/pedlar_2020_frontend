@@ -1,14 +1,12 @@
 import React, { Component } from "react";
 import CanvasJSReact from "../canvasJs/canvasjs.react";
 var CanvasJSChart = CanvasJSReact.CanvasJSChart;
+var xVal = 1;
 
-var dps = [];
-var xVal = dps.length + 1;
-var yVal = 15;
 class Chart extends Component {
   constructor(props) {
     super(props);
-    this.updateChart = this.updateChart.bind(this);
+    // this.updateChart = this.updateChart.bind(this);
     this.state = {
       options: {
         animationEnabled: true,
@@ -26,8 +24,8 @@ class Chart extends Component {
         axisX: {
           // valueFormatString: "MMM"
           color: "black",
-          // labelFontColor: "rgb(8, 17, 49)",
-          // tickColor: "rgb(8, 17, 49)",
+          labelFontColor: "rgb(8, 17, 49)",
+          tickColor: "rgb(8, 17, 49)",
         },
         axisY: {
           prefix: "$",
@@ -74,8 +72,8 @@ class Chart extends Component {
             name: "Trace",
             axisYType: "secondary",
             yValueFormatString: "$#,##0.00bn",
-            xValueFormatString: "MMMM",
-            dataPoints: dps,
+            xValueFormatString: "Prices",
+            dataPoints: [],
             color: "white",
           },
         ],
@@ -83,34 +81,32 @@ class Chart extends Component {
     };
   }
 
-  updateChart(trace, ticker) {
-    // if (
-    //   ticker != this.state.chartTicker &&
-    //   this.state.chartTicker != "Stock Prices"
-    // ) {
-    //   console.log("iweakrshjiwgjrh");
-    //   console.log(ticker);
-    //   this.setState({ chartTicker: ticker });
-    //   dps = [];
-    //   xVal = dps.length + 1;
-    // }
-    yVal = trace + Math.round(5 + Math.random() * (-5 - 5));
-    dps.push({ x: xVal, y: yVal });
-    console.log(dps);
-    xVal++;
-    if (dps.length > 150) {
-      dps.shift();
-    }
-    this.chart.render();
-  }
-
   componentWillReceiveProps(props) {
     // this.setState({ chartTicker: props.chartTicker });
     // this.updateChart(props.trace, props.chartTicker);
-    console.log(props.chartTicker);
+    console.log(props);
+    const trace = props.trace + Math.round(5 + Math.random() * (-5 - 5));
     let options = this.state.options;
-    options.title.text = props.chartTicker;
-    console.log(options);
+    let dps = options.data[0].dataPoints;
+
+    if (props.chartTicker !== options.title.text) {
+      options.title.text = props.chartTicker;
+      xVal = 0;
+      dps = [];
+      dps.push({ x: xVal, y: trace });
+    } else {
+      if (dps.length > 165) {
+        dps.shift();
+        dps.push({ x: xVal, y: trace });
+      } else {
+        dps.push({ x: xVal, y: trace });
+      }
+    }
+
+    options.data[0].dataPoints = dps;
+    xVal++;
+
+    console.log(options.data[0].dataPoints);
     this.setState({ options: options });
     this.chart.render();
   }

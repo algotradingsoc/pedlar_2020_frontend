@@ -128,7 +128,7 @@ class OrderBook extends Component {
           </div>
         </div>
         <div
-          className="mx-auto overflow-auto w-75"
+          className="mx-auto overflow-auto w-75 mb-5"
           style={{ maxHeight: "340px", minHeight: "340px" }}
         >
           <div id="tickers-div">
@@ -147,7 +147,7 @@ class OrderBook extends Component {
                 </button>
               ))}
             {this.state.selectedSymbols.length <= 0 && (
-              <div className="row w-75 mx-auto mt-5">
+              <div className="row w-75 mx-auto">
                 <div
                   className="row d-flex mx-auto text-light text-center pt-2 pb-2 mt-3 justify-content-center align-items-center"
                   style={{ width: "95%" }}
@@ -160,7 +160,10 @@ class OrderBook extends Component {
             )}
           </div>
         </div>
-        <div className="mx-auto w-75 mt-5" style={{ position: "relative" }}>
+        <div
+          className="mx-auto w-75"
+          style={{ position: "relative", marginTop: "5rem" }}
+        >
           {!this.state.chartTicker && (
             <div
               className="w-100 h-100 d-flex align-items-center justify-content-center"
@@ -179,7 +182,11 @@ class OrderBook extends Component {
               </div>
             </div>
           )}
-          <Chart className="p-5" chartTicker={this.state.chartTicker} />
+          <Chart
+            className="p-5"
+            chartTicker={this.state.chartTicker}
+            trace={this.state.trace}
+          />
         </div>
         <div className="text-light mx-auto w-75 text-right mt-3">
           IEX Real-Time Price provided for free by{" "}
